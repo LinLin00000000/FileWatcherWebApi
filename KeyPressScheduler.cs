@@ -22,6 +22,7 @@ public class KeyPressScheduler
     private readonly int interval;
     private readonly int jitter;
 
+    // Key: See https://learn.microsoft.com/zh-cn/dotnet/api/system.windows.forms.keys
     public KeyPressScheduler(Key toggleKey, Key triggerKey, string targetWindowTitle, int interval, int jitter)
     {
         this.triggerKey = triggerKey;
@@ -85,7 +86,7 @@ public class KeyPressScheduler
     public static void Test()
     {
         Console.WriteLine("Test!");
-        // 在这里初始化和使用 KeyPressScheduler
+        
         Key toggleKey = Key.O; // 指定用于启用/停用的快捷键
         Key triggerKey = Key.A; // 指定触发键
         string targetWindowTitle = "微信";

@@ -19,74 +19,86 @@ namespace FileWatcherWebApi
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://localhost:7543");
-                    // webBuilder.ConfigureKestrel((context, options) =>
-                    // {
-                    //     var loggerFactory = LoggerFactory.Create(builder =>
-                    //     {
-                    //         builder.AddConsole();
-                    //     });
+                    // webBuilder.UseUrls("http://localhost:7544");
+                    
+                    webBuilder.ConfigureKestrel((context, options) =>
+                    {
+                        var loggerFactory = LoggerFactory.Create(builder =>
+                        {
+                            builder.AddConsole();
+                        });
 
-                    //     var logger = loggerFactory.CreateLogger<Program>();
+                        var logger = loggerFactory.CreateLogger<Program>();
 
-                    //     var settings = context.Configuration.GetSection("ApplicationSettings");
-                    //     bool hasError = false;
+                        var settings = context.Configuration.GetSection("ApplicationSettings");
+                        // bool hasError = false;
 
-                    //     // if (!Enum.TryParse<Key>(settings["ToggleKey"], true, out var toggleKey))
-                    //     // {
-                    //     //     logger.LogError("Invalid configuration for TriggerKey");
-                    //     //     hasError = true;
-                    //     // }
+                        // if (!Enum.TryParse<Key>(settings["ToggleKey"], true, out var toggleKey))
+                        // {
+                        //     logger.LogError("Invalid configuration for TriggerKey");
+                        //     hasError = true;
+                        // }
 
-                    //     // if (!Enum.TryParse<Key>(settings["TriggerKey"], true, out var triggerKey))
-                    //     // {
-                    //     //     logger.LogError("Invalid configuration for TriggerKey");
-                    //     //     hasError = true;
-                    //     // }
+                        // if (!Enum.TryParse<Key>(settings["TriggerKey"], true, out var triggerKey))
+                        // {
+                        //     logger.LogError("Invalid configuration for TriggerKey");
+                        //     hasError = true;
+                        // }
 
-                    //     // var targetWindowTitle = settings["TargetWindowTitle"];
-                    //     // if (string.IsNullOrEmpty(targetWindowTitle))
-                    //     // {
-                    //     //     logger.LogError("TargetWindowTitle configuration is missing");
-                    //     //     hasError = true;
-                    //     // }
+                        // var targetWindowTitle = settings["TargetWindowTitle"];
+                        // if (string.IsNullOrEmpty(targetWindowTitle))
+                        // {
+                        //     logger.LogError("TargetWindowTitle configuration is missing");
+                        //     hasError = true;
+                        // }
 
-                    //     // if (!int.TryParse(settings["Interval_MS"], out var interval))
-                    //     // {
-                    //     //     logger.LogError("Invalid configuration for Interval_MS");
-                    //     //     hasError = true;
-                    //     // }
+                        // if (!int.TryParse(settings["Interval_MS"], out var interval))
+                        // {
+                        //     logger.LogError("Invalid configuration for Interval_MS");
+                        //     hasError = true;
+                        // }
 
-                    //     // if (!int.TryParse(settings["Jitter_MS"], out var jitter))
-                    //     // {
-                    //     //     logger.LogError("Invalid configuration for Jitter_MS");
-                    //     //     hasError = true;
-                    //     // }
+                        // if (!int.TryParse(settings["Jitter_MS"], out var jitter))
+                        // {
+                        //     logger.LogError("Invalid configuration for Jitter_MS");
+                        //     hasError = true;
+                        // }
 
-                    //     if (!IPAddress.TryParse(settings["Host"], out var host))
-                    //     {
-                    //         logger.LogError("Invalid configuration for Host");
-                    //         hasError = true;
-                    //     }
+                        // if (!IPAddress.TryParse(settings["Host"], out var host))
+                        // {
+                        //     logger.LogError("Invalid configuration for Host");
+                        //     hasError = true;
+                        // }
 
-                    //     if (!int.TryParse(settings["Port"], out var port))
-                    //     {
-                    //         logger.LogError("Invalid configuration for Port");
-                    //         hasError = true;
-                    //     }
+                        // if (!int.TryParse(settings["Port"], out var port))
+                        // {
+                        //     logger.LogError("Invalid configuration for Port");
+                        //     hasError = true;
+                        // }
 
-                    //     if (hasError)
-                    //     {
-                    //         logger.LogError("Please check your appsettings.json file and ensure the settings are correct.");
-                    //     }
-                    //     else if (host != null)
-                    //     {
-                    //         options.Listen(host, port);
-                    //         // KeyPressScheduler scheduler = new(toggleKey, triggerKey, targetWindowTitle, interval, jitter);
-                    //         // scheduler.Start();
-                    //         // KeyPressScheduler.Test();
-                    //     }
-                    // });
+                        // if (hasError)
+                        // {
+                        //     logger.LogError("Please check your appsettings.json file and ensure the settings are correct.");
+                        // }
+                        // else if (host != null)
+                        // {
+                        //     options.Listen(host, port);
+                        //     // KeyPressScheduler scheduler = new(toggleKey, triggerKey, targetWindowTitle, interval, jitter);
+                        //     // scheduler.Start();
+                        //     // KeyPressScheduler.Test();
+                        // }
+
+                        if (!string.IsNullOrEmpty(settings["Host"])
+                            && IPAddress.TryParse(settings["Host"], out var host)
+                            && int.TryParse(settings["Port"], out var port))
+                        {
+                            options.Listen(host, port);
+                        }
+                        else
+                        {
+                            options.Listen(IPAddress.Parse("127.0.0.1"), 7543);
+                        }
+                    });
                 });
     }
 
